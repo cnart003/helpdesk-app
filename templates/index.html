@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="page-header">
+    <h1>Ticket Dashboard</h1>
+    <a href="{{ url_for('submit') }}" class="btn btn-primary">+ New Ticket</a>
+</div>
+
+<!-- Stats Cards -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-number">{{ stats.total }}</div>
+        <div class="stat-label">Total Tickets</div>
+    </div>
+    <div class="stat-card open">
+        <div class="stat-number">{{ stats.open }}</div>
+        <div class="stat-label">Open</div>
+    </div>
+    <div class="stat-card in-progress">
+        <div class="stat-number">{{ stats.in_progress }}</div>
+        <div class="stat-label">In Progress</div>
+    </div>
+    <div class="stat-card resolved">
+        <div class="stat-number">{{ stats.resolved }}</div>
+        <div class="stat-label">Resolved</div>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="filters">
+    <form method="GET" action="/">
+        <label>Status:
+            <select name="status" onchange="this.form.submit()">
+                <option value="All" {% if status_filter == 'All' %}selected{% endif %}>All</option>
+                <option value="Open" {% if status_filter == 'Open' %}selected{% endif %}>Open</option>
+                <option value="In Progress" {% if status_filter == 'In Progress' %}selected{% endif %}>In Progress</option>
+                <option value="Resolved" {% if status_filter == 'Resolved' %}selected{% endif %}>Resolved</option>
+            </select>
+        </label>
+        <label>Priority:
+            <select name="priority" onchange="this.form.submit()">
+                <option value="All" {% if priority_filter == 'All' %}selected{% endif %}>All</option>
+                <option value="Low" {% if priority_filter == 'Low' %}selected{% endif %}>Low</option>
+                <option value="Medium" {% if priority_filter == 'Medium' %}selected{% endif %}>Medium</option>
+                <option value="High" {% if priority_filter == 'High' %}selected{% endif %}>High</option>
+                <option value="Critical" {% if priority_filter == 'Critical' %}selected{% endif %}>Critical</option>
+            </select>
+        </label>
+    </form>
+</div>
+
+<!-- Tickets Table -->
+<div class="table-wrapper">
+    {% if tickets %}
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Submitted By</th>
+                <th>Created</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ticket in tickets %}
+            <tr>
+                <td>{{ ticket.id }}</td>
+                <td>{{ ticket.title }}</td>
+                <td>{{ ticket.category }}</td>
+                <td><span class="badge priority-{{ ticket.priority | lower }}">{{ ticket.priority }}</span></td>
+                <td><span class="badge status-{{ ticket.status | lower | replace(' ', '-') }}">{{ ticket.status }}</span></td>
+                <td>{{ ticket.submitter_name }}</td>
+                <td>{{ ticket.created_at }}</td>
+                <td><a href="{{ url_for('ticket', ticket_id=ticket.id) }}" class="btn btn-sm">View</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        <p>No tickets found. <a href="{{ url_for('submit') }}">Submit one now.</a></p>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

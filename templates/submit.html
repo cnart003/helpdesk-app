@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="page-header">
+    <h1>Submit a Ticket</h1>
+    <a href="{{ url_for('index') }}" class="btn">← Back to Dashboard</a>
+</div>
+
+<div class="form-card">
+    <form method="POST" action="/submit">
+        <div class="form-group">
+            <label for="title">Issue Title *</label>
+            <input type="text" id="title" name="title" placeholder="Brief description of the issue" required>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="category">Category *</label>
+                <select id="category" name="category" required>
+                    <option value="">Select a category</option>
+                    <option value="Hardware">Hardware</option>
+                    <option value="Software">Software</option>
+                    <option value="Network">Network</option>
+                    <option value="Account Access">Account Access</option>
+                    <option value="Email">Email</option>
+                    <option value="Printer">Printer</option>
+                    <option value="Audio/Visual">Audio/Visual</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="priority">Priority *</label>
+                <select id="priority" name="priority" required>
+                    <option value="">Select priority</option>
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                    <option value="Critical">Critical</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description *</label>
+            <textarea id="description" name="description" rows="5"
+                placeholder="Please describe the issue in detail..." required></textarea>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="submitter_name">Your Name *</label>
+                <input type="text" id="submitter_name" name="submitter_name" placeholder="Full name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="submitter_email">Your Email *</label>
+                <input type="email" id="submitter_email" name="submitter_email" placeholder="email@company.com" required>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Submit Ticket</button>
+            <a href="{{ url_for('index') }}" class="btn">Cancel</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
