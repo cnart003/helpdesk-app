@@ -1,70 +1,132 @@
-# Getting Started with Create React App
+# IT Help Desk Ticket Management System
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack web application for managing IT support tickets, built with Python, Flask, SQLite, React.js, and JavaScript. Designed to simulate the core functionality of enterprise IT service management platforms like ServiceNow and Jira Service Management.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Ticket Submission** — Users can submit IT support tickets with title, category, priority, description, and contact information
+- **Dashboard (Flask + Jinja2)** — Server-side rendered dashboard with real-time stats for Total, Open, In Progress, and Resolved tickets
+- **React Dashboard** — Client-side React.js frontend consuming the Flask REST API with live filtering, search, and component-based UI
+- **Filtering & Search** — Filter tickets by status and priority, search by title or submitter name
+- **Ticket Detail View** — Full ticket information with status update capability
+- **Status Management** — Update ticket status through the full lifecycle: Open → In Progress → Resolved → Closed
+- **REST API** — JSON endpoint at `/api/tickets` for programmatic access to ticket data
+- **Persistent Storage** — SQLite database stores all ticket data with timestamps
+- **CORS Support** — Flask backend configured with flask-cors to support cross-origin requests from the React frontend
 
-### `npm start`
+## Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+| Layer | Technology |
+|-------|-----------|
+| Backend | Python 3, Flask |
+| Database | SQLite3 |
+| Frontend (SSR) | HTML5, CSS3, JavaScript, Jinja2 |
+| Frontend (SPA) | React.js |
+| API | REST (JSON) |
+| Cross-Origin | flask-cors |
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Project Structure
 
-### `npm test`
+```
+helpdesk-app/
+├── helpdesk.py              # Main Flask application, routes, database logic, REST API
+├── templates/
+│   ├── base.html            # Base layout with navigation
+│   ├── index.html           # Server-side dashboard with stats, filters, and ticket table
+│   ├── submit.html          # Ticket submission form
+│   └── ticket.html         # Individual ticket detail and status update
+├── static/
+│   └── style.css            # Custom styling for Flask frontend
+├── react-frontend/          # React.js SPA consuming the Flask REST API
+│   ├── src/
+│   │   ├── App.js           # Main React component — dashboard, filters, search, table
+│   │   └── App.css          # React component styles
+│   └── package.json
+└── screenshots/
+    ├── dashboard.png
+    ├── submit.png
+    └── ticket.png
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Getting Started
 
-### `npm run build`
+### Prerequisites
+- Python 3.x
+- Node.js & npm
+- pip
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Backend Setup
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+# Clone the repository
+git clone https://github.com/cnart003/helpdesk-app.git
+cd helpdesk-app
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Install Python dependencies
+pip install flask flask-cors
 
-### `npm run eject`
+# Run the Flask backend
+py helpdesk.py
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Flask app runs at `http://127.0.0.1:5000`
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### React Frontend Setup
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```bash
+# In a separate terminal
+cd react-frontend
+npm install
+npm start
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+React app runs at `http://localhost:3000`
 
-## Learn More
+## API
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### GET /api/tickets
+Returns all tickets as a JSON array.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```json
+[
+  {
+    "id": 1,
+    "title": "Laptop not connecting to Wi-Fi",
+    "category": "Network",
+    "priority": "High",
+    "status": "In Progress",
+    "submitter_name": "John Smith",
+    "submitter_email": "jsmith@company.com",
+    "created_at": "2026-04-19 21:18:38",
+    "updated_at": "2026-04-19 21:18:38"
+  }
+]
+```
 
-### Code Splitting
+## Screenshots
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### React Dashboard (localhost:3000)
+![Dashboard showing ticket stats and table](screenshots/dashboard.png)
 
-### Analyzing the Bundle Size
+### Submit Ticket
+![Ticket submission form](screenshots/submit.png)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Ticket Detail
+![Individual ticket view with status update](screenshots/ticket.png)
 
-### Making a Progressive Web App
+## Architecture
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+This project demonstrates two frontend approaches consuming the same backend:
 
-### Advanced Configuration
+1. **Server-Side Rendering (SSR)** — Flask renders HTML using Jinja2 templates, serving complete pages from the server
+2. **Single Page Application (SPA)** — React.js fetches data from the REST API and renders the UI client-side
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Both frontends connect to the same SQLite database through the Flask backend, showcasing a clean API-first architecture.
 
-### Deployment
+## Motivation
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Built to demonstrate practical understanding of IT service management workflows — the same processes used in enterprise ITSM platforms like ServiceNow, Jira Service Management, and Microsoft Power Apps. This project reflects real-world help desk operations including ticket triage, priority management, status lifecycle tracking, REST API design, and modern React frontend development.
 
-### `npm run build` fails to minify
+## Author
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Caleb Nartey — [github.com/cnart003](https://github.com/cnart003)
